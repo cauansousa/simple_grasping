@@ -1,0 +1,21 @@
+<launch>
+
+  <!-- Start MoveIt -->
+  <include file="$(find fetch_moveit_config)/launch/move_group.launch" >
+    <arg name="info" value="true"/><!-- publish grasp markers -->
+  </include>
+
+  <!-- Start MoveIt RViz -->
+  <!--<include file="$(find fetch_moveit_config)/launch/moveit_rviz.launch">
+    <arg name="rviz_config" value="$(find fetch_moveit_config)/launch/moveit.rviz"/>
+  </include>-->
+
+  <!-- Start Perception -->
+  <node name="basic_grasping_perception" pkg="simple_grasping" type="basic_grasping_perception" >
+    <rosparam command="load" file="$(find simple_grasping)/launch/config/simple_grasping.yaml" />
+  </node>
+
+  <!-- Drive to the table, pick stuff up -->
+  <node name="demo" pkg="simple_grasping" type="pick_and_place.py" output="screen" />
+
+</launch>

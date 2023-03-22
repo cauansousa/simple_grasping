@@ -1,0 +1,8 @@
+<launch>
+
+  <!-- Start Perception -->
+  <node name="basic_grasping_perception" pkg="simple_grasping" type="basic_grasping_perception" >
+    <rosparam command="load" file="$(find simple_grasping)/config/simple_grasping.yaml" />
+  </node>
+
+</launch>
