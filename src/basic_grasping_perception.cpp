@@ -1,34 +1,3 @@
-/*
- * Copyright 2013-2014, Unbounded Robotics Inc.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- *     * Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the Unbounded Robotics, Inc. nor the names of its
- *       contributors may be used to endorse or promote products derived from
- *       this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- */
-
-// Author: Michael Ferguson
-
 #include <ros/ros.h>
 #include <actionlib/server/simple_action_server.h>
 #include <tf/transform_listener.h>
@@ -62,13 +31,13 @@ public:
     world_frame_ = "base_link";
     nh_.getParam("frame_id", world_frame_);
 
-    // Create planner
+    // Create moveit planner, linked to shape_grasp_planner.cpp
     planner_.reset(new ShapeGraspPlanner(nh_));
 
-    // Create perception
+    // Create perception, recive the pc and find all graspable objects. Linked to object_support_segmentation.cpp
     segmentation_.reset(new ObjectSupportSegmentation(nh_));
 
-    // Advertise an action for perception + planning
+    // Advertise an action for perception + planning. The trigger to happen the detection and calculating all the motions in order to pick an place
     server_.reset(new server_t(nh_, "find_objects",
                                boost::bind(&BasicGraspingPerception::executeCallback, this, _1),
                                false));
@@ -165,7 +134,7 @@ private:
     {
       grasping_msgs::GraspableObject g;
       g.object = objects_[i];
-      if (goal->plan_grasps)
+      if (goal->plan_grasps).
       {
         // Plan grasps for object
         planner_->plan(objects_[i], g.grasps);
@@ -180,8 +149,7 @@ private:
 
   ros::NodeHandle nh_;
 
-  bool debug_;
-
+  bool debug_;s
   tf::TransformListener listener_;
   std::string world_frame_;
 
